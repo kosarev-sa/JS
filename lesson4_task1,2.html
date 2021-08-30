@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Урок 4. Объекты в JavaScript</title>
+</head>
+<body>
+<script>
+    {// 1. Написать функцию, преобразующую число в объект. Передавая на вход число от 0 до 999, мы должны получить на
+        // выходе объект, в котором в соответствующих свойствах описаны единицы, десятки и сотни. Например, для числа
+        // 245 мы должны получить следующий объект: {‘единицы’: 5, ‘десятки’: 4, ‘сотни’: 2}. Если число превышает 999,
+        // необходимо выдать соответствующее сообщение с помощью console.log и вернуть пустой объект.
+        function parse_num_obj(num) {
+            let max_num = 999;
+            if (num < max_num) {
+                let uni = Math.floor(num % 10);
+                let ten = Math.floor(num / 10 % 10);
+                let hun = Math.floor(num / 100 % 10);
+                return {
+                    units: uni,
+                    tens: ten,
+                    hundreds: hun
+                }
+            } else {
+                alert('Число превышает '+ max_num +' или введено не верно. Объект не сформирован.');
+                return {}
+            }
+        }
+        let number = +prompt('Введите число от 0 до 999: ') //Math.round(Math.random() * 1000)
+        const new_obj = parse_num_obj(number)
+        console.log(new_obj)
+    }
+    {// 2.Продолжить работу с интернет-магазином:
+        // 2.1. В прошлом домашнем задании вы реализовали корзину на базе массивов.
+        // Какими объектами можно заменить их элементы?
+        // 2.2. Реализуйте такие объекты.
+        // 2.3. Перенести функционал подсчета корзины на объектно-ориентированную базу.
+        function newItem(name, price, quantity) {
+            return {
+                name: name,
+                price: price,
+                quantity: quantity,
+            }
+        }
+
+        function basketPushing(list, name, price, quantity) {
+            list.push(newItem(name, price, quantity))
+        }
+
+        function totalCost(goodsInBasket) {
+            let sum = 0
+            for (const i of goodsInBasket) {
+                sum += i.price * i.quantity
+            }
+            return sum
+        }
+
+        let basket = []
+        basketPushing(basket,'book', 250, 5);
+        basketPushing(basket,'drawing block', 50, 12);
+        basketPushing(basket,'pen', 32, 20);
+        basketPushing(basket,'felt pen', 40, 100);
+
+        console.log(basket, totalCost(basket));
+    }
+</script>
+</body>
+</html>
