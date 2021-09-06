@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Урок 5. Введение в DOM. task1</title>
+</head>
+<body>
+<div class="block"></div>
+    <script>
+        "use strict"
+        //1. Создать функцию, генерирующую шахматную доску. При этом можно использовать любые html-теги по своему желанию.
+            // Доска должна быть разлинована соответствующим образом, т.е. чередовать черные и белые ячейки.
+            // Строки должны нумероваться числами от 1 до 8, столбцы – латинскими буквами A, B, C, D, E, F, G, H.
+            // (использовать createElement / appendChild)
+            function creating() {
+                let block = document.querySelector(".block");
+                let field = document.createElement("div");
+                field.className = "field";
+                block.appendChild(field);
+
+                block.style.width = "550px";
+                block.style.height = "550px";
+                block.style.display = "flex";
+                block.style.flexWrap = "wrap";
+                block.style.margin = "5% auto 5%";
+
+                field.style.width = "50px";
+                field.style.height = "50px";
+                field.style.fontSize = "20px";
+                field.style.color = "white";
+                field.style.textAlign = "center";
+            }
+
+            function painting() {
+                for (let i = 1; i < 122; i++) {
+                    window.onload = creating();
+                }
+                let nField = document.querySelectorAll(".field");
+                for (let i = 0; i < nField.length; i++) {
+                    let fieldClr = "white";
+                    if (i % 2 == 0) {
+                        fieldClr = "black";
+                    }
+                    nField[i].style.background = fieldClr;
+
+                    for (let j = 0; j < 12; j++) {
+                        nField[j].style.background = "white";
+                    }
+                    for (let j = 11; j < 22; j++) {
+                        nField[j].style.background = "grey";
+                    }
+                    for (let j = 110; j < 121; j++) {
+                        nField[j].style.background = "grey";
+                    }
+                    for (let j = 10; j < 122; j += 11) {
+                        nField[j].style.background = "white";
+                    }
+                    for (let j = 22; j < 121; j += 11) {
+                        nField[j].style.background = "grey";
+                    }
+                    for (let j = 31; j < 121; j += 11) {
+                        nField[j].style.background = "grey";
+                    }
+                    let num = 8
+                    for (let j = 22; j < 100; j += 11) {
+                        nField[j].innerText = num;
+                        num--;
+                    }
+                    let char = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+                    for (let j = 111; j < 119; j++) {
+                        nField[j].innerText = char[j - 111];
+                    }
+                }
+            }
+            painting()
+    </script>
+</body>
+</html>

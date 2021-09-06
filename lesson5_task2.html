@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Урок 5. Введение в DOM. task2</title>
+</head>
+<body>
+<div class="goods-basket"></div>
+    <script>
+        "use strict"
+        {// 2. Сделать генерацию корзины динамической: верстка корзины не должна находиться в HTML-структуре.
+            // Там должен быть только div, в который будет вставляться корзина, сгенерированная на базе JS:
+            // 2.1. Пустая корзина должна выводить строку «Корзина пуста»;
+            // 2.2. Наполненная должна выводить «В корзине: n товаров на сумму m рублей».
+            let goodsBasket = document.querySelector('.goods-basket');
+            let basket = []
+
+            function newItem(name, price, quantity) {
+                return {
+                    name: name,
+                    price: price,
+                    quantity: quantity,
+                }
+            }
+
+            function basketPushing(list, name, price, quantity) {
+                list.push(newItem(name, price, quantity))
+            }
+
+            function totalCost(goodsInBasket) {
+                let sum = 0
+                for (const i of goodsInBasket) {
+                    sum += i.price * i.quantity
+                }
+                return sum
+            }
+
+            basketPushing(basket,'book', 250, 5);
+            basketPushing(basket,'drawing block', 50, 12);
+            basketPushing(basket,'pen', 32, 20);
+            basketPushing(basket,'felt pen', 40, 100);
+
+            console.log(basket, totalCost(basket));
+
+            let zeroGoods = '<h3><p>Корзина пуста</p>'
+            let notZeroGoods = `<h3><p>В корзине: ${basket.length} товар(а/ов) на сумму ${totalCost(basket)} рублей</p>`
+
+            if (basket == 0) {
+                goodsBasket.insertAdjacentHTML('afterbegin', `<div class="goods">${zeroGoods}</div>`);
+            }
+            else {
+                goodsBasket.insertAdjacentHTML('afterbegin', `<div class="goods">${notZeroGoods}</div>`)
+                for (let good of basket) {
+                    goodsBasket.insertAdjacentHTML('afterbegin', `<div class="goods">
+                    <span>Товар: '${good.name}'/ </span><span>Цена: ${good.price} руб./ </span>
+                    <span>Количество: ${good.quantity} шт.</span></div>`);
+                }
+            }
+        }
+
+        //Примеры выводов:
+        // 1.
+        // Корзина пуста
+
+        // 2.
+        // Товар: 'felt pen'/ Цена: 40 руб./ Количество: 100 шт.
+        // Товар: 'pen'/ Цена: 32 руб./ Количество: 20 шт.
+        // Товар: 'drawing block'/ Цена: 50 руб./ Количество: 12 шт.
+        // Товар: 'book'/ Цена: 250 руб./ Количество: 5 шт.
+        //
+        // В корзине: 4 товар(а/ов) на сумму 6490 рублей
+
+    </script>
+</div>
+</body>
+</html>
