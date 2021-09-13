@@ -1,0 +1,113 @@
+<!--Доработать модуль корзины.-->
+<!--a. Добавлять в объект корзины выбранные товары по клику на кнопке «Купить» без перезагрузки страницы-->
+<!--b. Привязать к событию покупки товара пересчет корзины и обновление ее внешнего вида-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Урок 6. Обработка событий в JavaScript</title>
+</head>
+<body>
+<div class="catalog"></div>
+<div class="basket"></div>
+<script>
+    // Каталог:
+    const catalog = {
+        catalogTag: null,
+        catalogList: [],
+
+        newItem(name, price) {
+            return {
+                name: name,
+                price: price}
+        },
+
+        catalogPushing(name, price) {
+            this.catalogList.push(this.newItem(name, price))
+        },
+
+        renderCatalog() {
+            this.catalogList.forEach(function (item, i) {
+                catalog.renderGood(item, i);
+            })
+        },
+
+        renderGood(item, id) {
+            this.catalogTag = document.querySelector('.catalog');
+            this.catalogTag.insertAdjacentHTML('beforeend',
+                `<div class="good">
+                    <h4>Товар: '${item.name}'</h4>
+                    <h5>Цена: ${item.price} руб.</h5>
+                    <button class="good-to-basket" data-id="${id}">Купить</button>
+                </div><br>`);
+        }
+    }
+
+    // Корзина:
+    const basket = {
+        basketTag: null,
+        basketList: [],
+
+        newItem(name, price, quantity) {
+            return {
+                name: name,
+                price: price,
+                quantity: quantity}
+        },
+
+        totalCost() {
+            let sum = 0
+            for (const i of this.basketList) {
+                sum += i.price * i.quantity
+            }
+            return sum
+        },
+
+        renderBasket() {
+            this.basketTag = document.querySelector('.basket');
+            this.basketTag.textContent = '';
+            let zeroGoods = '<h3><p>Корзина пуста</p>'
+            let notZeroGoods =
+                `<h3><p>В корзине: ${this.basketList.length} товар(а/ов) на сумму ${this.totalCost()} рублей</p>
+                <a class="next" href="#">Продолжить оформление</a>`
+
+            if (this.basketList === 0) {
+                this.basketTag.insertAdjacentHTML('afterbegin', `<div class="goods">${zeroGoods}</div>`);
+            } else {
+                this.basketTag.insertAdjacentHTML('afterbegin', `<div class="goods">${notZeroGoods}</div>`)
+                for (let good of this.basketList) {
+                    this.basketTag.insertAdjacentHTML('afterbegin', `<div class="goods">
+                    <span>Товар: '${good.name}'/ </span><span>Цена: ${good.price} руб./ </span>
+                    <span>Количество: ${good.quantity} шт.</span></div>`);
+                }
+            }
+        },
+
+        eventHandler(){
+            catalog.catalogTag.addEventListener('click', function(event) {
+                if (event.target.className ==='good-to-basket') {
+                    const id = +event.target.getAttribute('data-id');
+                    const adding = catalog.catalogList[id];
+                    const basketsGood = basket.basketList.find((item) => adding.name === item.name);
+                    if (!basketsGood) {
+                        basket.basketList.push(basket.newItem(adding.name, adding.price, 1));
+                    }else{
+                        basket.basketList[basket.basketList.indexOf(basketsGood)].quantity++}
+                    basket.renderBasket();
+            }
+        })
+        }
+    }
+
+    catalog.catalogPushing('book', 250);
+    catalog.catalogPushing('drawing block', 50);
+    catalog.catalogPushing('pen', 32);
+    catalog.catalogPushing('felt pen', 40)
+
+    catalog.renderCatalog()
+    basket.renderBasket()
+    basket.eventHandler()
+</script>
+</body>
+</html>
